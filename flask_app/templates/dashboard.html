@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Band Together</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="container-fluid ">
+        <div class="row justify-content-between m-3">
+            <div class="col-5">
+                <h3 class="text-left ">Rock On {{ session['first_name'] }} {{ session['last_name'] }}!</h3>
+            </div>
+            <div class="col-7">
+                <div class="row justify-content-end">
+                    <div class="col-3">
+                        <h5 class="text-right"><a href="/mybands/{{session['id']}}">My Bands</a></h5>
+                    </div>
+                    <div class="col-2">
+                        
+                        <h5 class="text-right"><a href="{{ url_for('get_new_band') }}">New Band</a></h5>
+                    </div>
+                    <div class="col-2">
+                        <form action="/logout">
+                            <button type="submit" class="btn btn-outline-primary" >Logout</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-between  m-3">
+            <div class="col-5">
+                <h5 class="text-left">All Bands</h5>
+            </div>
+           
+        </div>
+    
+        <!-- DIV DE LA PRIMERA COLUMNA -->
+        <div class="row align-items-start m-3 ">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                      <th scope="col">Band Name</th>
+                      <th scope="col">Founding Member</th>
+                      <th scope="col">Genre</th>
+                      <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for band in list_bands: %}
+                        <tr>
+                            <td scope="row">{{band.band_name}}</a></td>
+                            <td>{{band.user.first_name}} {{band.user.last_name}}</td>
+                            <td>{{band.music_genre}}</td>
+                            <td>
+                                {% if band.user_id == session ['id']: %}
+                                    <a href="/edit/{{ band.id }}">edit</a>
+                                    <a href="/delete/{{ band.id }}">delete</a>
+                                {% else %}
+                                    {% if band.user_joined %}
+                                      <a href="/quit_band/{{ band.id }}">quit</a>
+                                    {% else %}
+                                      <a href="/join_band/{{ band.id }}">Join</a>
+                                    {% endif %}
+                                {% endif %}
+                                   
+                            </td> 
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>   
+        </div>
+    </div>
+</body>
+</html>
+
